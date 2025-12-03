@@ -31,12 +31,6 @@ public class AOC02
 		}
 	System.out.println(total1);
 
-			// checkdigitforrepeat(11);
-			// checkdigitforrepeat(1111);
-			// checkdigitforrepeat(112);
-			// checkdigitforrepeat(2121);
-			// checkdigitforrepeat(1100004);
-			// checkdigitforrepeat(98989898);
 	}
 	
 	private static void processLine(String input)
@@ -46,10 +40,15 @@ public class AOC02
 		{
 			String[] numbers = inputs[i].split("-");
 			
-		//System.out.println(numbers[0] + " " + numbers[1]);
+		System.out.println(numbers[0] + "-" + numbers[1]);
 		for(long j = stringToNum(numbers[0]);j<=stringToNum(numbers[1]);j++)
-			checkDigitForRepeat(j);
-			//checkDigitForRepeat(stringToNum(numbers[1]));
+			{
+				checkDigitForRepeat(j);
+				if(findPatternNumbers(""+j))
+					System.out.println(j);
+		
+			}
+	
 		}
 	}
 	
@@ -67,6 +66,36 @@ public class AOC02
 		return returnValue;
 	}
 
+	private static boolean findPatternNumbers(String patternCandidate)
+	{
+		System.out.print("analyzing " + patternCandidate);
+		for(int i = 2; i<= patternCandidate.length(); i++)
+		if(patternCandidate.length() % i == 0)
+		{
+					
+			boolean mismatchFound = false;
+			int patternLength = patternCandidate.length() / i;
+			int j = patternLength;
+			String patternToMatch = patternCandidate.substring(0,j);
+			System.out.print(": "+j + " : " + patternToMatch + ";");
+			while((j<=patternCandidate.length() - patternLength) && !mismatchFound)
+			{
+			int stop = j + patternCandidate.length();
+			String patternSubString = patternCandidate.substring(j,stop); 
+			System.out.print("@" + patternSubString);
+			mismatchFound = (patternSubString.compareTo(patternToMatch) != 0);
+			if(mismatchFound) System.out.println("exiting");
+			j = stop;
+			}
+			if(!mismatchFound)
+			return(true);	
+		
+		} 
+		return(false);
+	
+
+	}
+
 
 	
 
@@ -79,7 +108,7 @@ public class AOC02
 		{	//System.out.println(candidate + " repeat");
 		//total1 += stringToNum(intString.substring(0,intString.length()/2));
 		total1 += candidate;
-		System.out.println(total1);
+//		System.out.println(total1);
 		}
 		
 	}

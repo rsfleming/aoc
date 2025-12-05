@@ -4,6 +4,7 @@ public class AOC02
 {
 	
 	private static long total1 = 0;
+	private static long total2 = 0;
 	public static void main(String[] args)
 	{
 		
@@ -31,6 +32,7 @@ public class AOC02
 		}
 	System.out.println(total1);
 
+	System.out.println(total2);
 	}
 	
 	private static void processLine(String input)
@@ -40,12 +42,12 @@ public class AOC02
 		{
 			String[] numbers = inputs[i].split("-");
 			
-		System.out.println(numbers[0] + "-" + numbers[1]);
+		//System.out.println(numbers[0] + "-" + numbers[1]);
 		for(long j = stringToNum(numbers[0]);j<=stringToNum(numbers[1]);j++)
 			{
 				checkDigitForRepeat(j);
-				if(findPatternNumbers(""+j))
-					System.out.println(j);
+				findPatternNumbers(""+j);
+					//System.out.println(j);
 		
 			}
 	
@@ -68,28 +70,32 @@ public class AOC02
 
 	private static boolean findPatternNumbers(String patternCandidate)
 	{
-		System.out.print("analyzing " + patternCandidate);
+		//System.out.print("analyzing " + patternCandidate);
 		for(int i = 2; i<= patternCandidate.length(); i++)
 		if(patternCandidate.length() % i == 0)
 		{
 					
 			boolean mismatchFound = false;
 			int patternLength = patternCandidate.length() / i;
+			
 			int j = patternLength;
 			String patternToMatch = patternCandidate.substring(0,j);
-			System.out.print(": "+j + " : " + patternToMatch + ";");
-			while((j<=patternCandidate.length() - patternLength) && !mismatchFound)
+			//System.out.print(": looking for "+patternToMatch + ";");
+			while((j + patternLength <= patternCandidate.length()) && !mismatchFound)
 			{
-			int stop = j + patternCandidate.length();
-			String patternSubString = patternCandidate.substring(j,stop); 
-			System.out.print("@" + patternSubString);
-			mismatchFound = (patternSubString.compareTo(patternToMatch) != 0);
-			if(mismatchFound) System.out.println("exiting");
-			j = stop;
+			
+			String compareSubString = patternCandidate.substring(j,j+patternLength); 
+			//System.out.print("@" + compareSubString);
+			mismatchFound = (compareSubString.compareTo(patternToMatch) != 0);
+			j += patternLength;
 			}
 			if(!mismatchFound)
-			return(true);	
-		
+			{
+				total2+=stringToNum(patternCandidate);
+				System.out.println("match @ " + patternCandidate + ":" + patternToMatch + " - " + total2);
+				
+				return(true);	
+			}
 		} 
 		return(false);
 	

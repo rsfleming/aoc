@@ -2,7 +2,7 @@ import java.io.*;
 
 public class AOC03
 {
-public static int total1 = 0;
+public static long total1 = 0;
 
 public static void main(String[] args)
 	{
@@ -32,42 +32,83 @@ public static void main(String[] args)
 
 		System.out.println("" + total1);
 	}
+public static void processLine1(String line)
+{
+String sortedLine = sortString(line);
+System.out.println(line + " : " + sortedLine);
+
+
+}
 
 public static void processLine(String line)
 	{
-		int[] batteries = {0,1};
+		int[] batteries = {0,1,2,3,4,5,6,7,8,9,10,11};
 		int maxDigitOne = 0;
 		int maxDigitTwo = 1;
-		System.out.println(line);
+	
+	System.out.println("\n"+line + " LENGTH: " + line.length());
+	System.out.println("POS\tRANGE\tSubSt\tStartVal");
+
 		for(int q = 0; q<batteries.length; q++)
-		{
-			System.out.print("\nQ:"+q + "   ");
+		{	
+			System.out.print("Q:"+q + "\t");
 			int iterationStart = (q==0?0:(batteries[q-1]+1));
 			int iterationStop = line.length() - batteries.length + q +1;
-			for(int i = iterationStart; i< iterationStop; i++)
-				{System.out.print(line.charAt(i));
+			batteries[q]=iterationStart;
+			System.out.print(iterationStart + ":" + iterationStop + "\t" + line.substring(iterationStart,iterationStop) + "\t+"+line.charAt(batteries[q])+"\t");
+			
+				for(int i = iterationStart+1; i< iterationStop; i++)
+				
 					if(line.charAt(i) > line.charAt(batteries[q]))
-					batteries[q] = i;
+				{
+				
+				batteries[q] = i;
+				System.out.print("NEW FOUND @ POSITION" + batteries[q] + " VALUE:" + line.charAt(batteries[q])+"\t");
 				}
+			System.out.println(batteries[q] + "\t" + line.charAt(batteries[q]));
 //		System.out.println(">"+batteries[q]);
 		}
-		System.out.println("<");
+		//System.out.println("<");
 		String joltage = "";
 		for(int k =0;k<batteries.length;k++)
 			joltage += ("" + line.charAt(batteries[k]));
 		
 //		System.out.println ("" + stringToNum(joltage));	
-		System.out.println(joltage);
+		//System.out.println(joltage);
 		total1+=stringToNum(joltage);
-		System.out.println (joltage + "    -     " + total1);	
+		System.out.println ("Line Value: "+joltage + "\tTotal: " + total1);	
 	}
 
-	private static int stringToNum(String numberCandidate)
+	private static String sortString(String input)
 	{
-		int returnValue = -1;
+		
+		for(int i = 0; i < input.length()-1;i++)
+			for(int j = i+1;j<input.length();j++)
+				{
+					if(input.charAt(i)<input.charAt(j))
+						input = swapChar(input,i,j);
+				}
+		return input;
+	}
+
+	private static String swapChar(String input, int pos1, int pos2)
+	{
+		char tChar1 = input.charAt(pos1);
+		char[] charArray = input.toCharArray();
+		charArray[pos1] = charArray[pos2];
+		charArray[pos2] = tChar1;
+	
+		
+		return new String(charArray);
+	}
+	
+
+	private static long stringToNum(String numberCandidate)
+	{
+		long returnValue = -1;
 		try
 		{
-			returnValue = Integer.parseInt(numberCandidate);
+			returnValue = Long.parseLong(numberCandidate);
 		}
 		catch(Exception e)
 		{
